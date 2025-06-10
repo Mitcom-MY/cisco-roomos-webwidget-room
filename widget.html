@@ -267,6 +267,8 @@
                 console.log(`Humidity sensor not available on main device`);
                 humidity.innerHTML = "N/A";
               }
+
+              airQuality.innerHTML = "N/A";
             }
 
             try {
@@ -286,26 +288,26 @@
               .then(value => (value == -1 ) ? 'Not Set' : value)
             
             try {
-              ambientNoise.innerHTML =
-                await xapi.Status.RoomAnalytics.AmbientNoise.Level.A.get();
+              const anValue = await xapi.Status.RoomAnalytics.AmbientNoise.Level.A.get();
+              ambientNoise.innerHTML = anValue + "dBA";
                 
-                xapi.Status.RoomAnalytics.AmbientNoise.Level.A.on(
-                  (value) => {
-                    ambientNoise.innerHTML = value;
-                  }
+              xapi.Status.RoomAnalytics.AmbientNoise.Level.A.on(
+                (value) => {
+                  ambientNoise.innerHTML = value + "dBA";
+                }
               );
             } catch {
               ambientNoise.innerHTML = "N/A";
             }
 
             try {
-              soundLevel.innerHTML =
-                await xapi.Status.RoomAnalytics.Sound.Level.A.get();
-                
-                xapi.Status.RoomAnalytics.Sound.Level.A.on(
-                  (value) => {
-                    soundLevel.innerHTML = value;
-                  }
+              const slValue = await xapi.Status.RoomAnalytics.Sound.Level.A.get();
+              soundLevel.innerHTML = slValue + "dBA";
+              
+              xapi.Status.RoomAnalytics.Sound.Level.A.on(
+                (value) => {
+                  soundLevel.innerHTML = value + "dBA";
+                }
               );
             } catch {
               soundLevel.innerHTML = "N/A";

@@ -289,11 +289,11 @@
             
             try {
               const anValue = await xapi.Status.RoomAnalytics.AmbientNoise.Level.A.get();
-              ambientNoise.innerHTML = anValue + "dBA";
+              ambientNoise.innerHTML = anValue + " dBA";
                 
               xapi.Status.RoomAnalytics.AmbientNoise.Level.A.on(
                 (value) => {
-                  ambientNoise.innerHTML = value + "dBA";
+                  ambientNoise.innerHTML = value + " dBA";
                 }
               );
             } catch {
@@ -302,11 +302,11 @@
 
             try {
               const slValue = await xapi.Status.RoomAnalytics.Sound.Level.A.get();
-              soundLevel.innerHTML = slValue + "dBA";
+              soundLevel.innerHTML = slValue + " dBA";
               
               xapi.Status.RoomAnalytics.Sound.Level.A.on(
                 (value) => {
-                  soundLevel.innerHTML = value + "dBA";
+                  soundLevel.innerHTML = value + " dBA";
                 }
               );
             } catch {

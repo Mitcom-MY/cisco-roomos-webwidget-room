@@ -88,7 +88,7 @@
                   </span>
                 </header>
                 <div class="card-content has-text-centered">
-                  <h1 class="title" id="peopleCountCurrentCapacity">...</h1>
+                  <p><span class="title" id="peopleCountCurrent">...</span> / <span class="title" id="peopleCountCapacity">...</span></p>
                 </div>
               </div>
             </div>
@@ -142,10 +142,10 @@
       const humidity = document.getElementById("humidity");
       const peoplePresence = document.getElementById("peoplePresence");
       const peopleCountCurrentCapacity = document.getElementById("peopleCountCurrentCapacity");
-      // const peopleCountCurrent = document.getElementById("peopleCountCurrent");
-      // const peopleCountCapacity = document.getElementById(
-      //   "peopleCountCapacity"
-      // );
+      const peopleCountCurrent = document.getElementById("peopleCountCurrent");
+      const peopleCountCapacity = document.getElementById(
+        "peopleCountCapacity"
+      );
       const ambientNoise = document.getElementById("ambientNoise");
       
       
@@ -273,12 +273,12 @@
 
             peoplePresence.innerHTML =
                await await xapi.Status.RoomAnalytics.PeoplePresence.get();
-            // peopleCountCurrent.innerHTML =
-            //   await await xapi.Status.RoomAnalytics.PeopleCount.Current.get()
-            //   .then(value => (value == -1 ) ? '0' : value)
-            // peopleCountCapacity.innerHTML =
-            //   await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get()
-            //   .then(value => (value == -1 ) ? 'Not Set' : value)
+            peopleCountCurrent.innerHTML =
+              await await xapi.Status.RoomAnalytics.PeopleCount.Current.get()
+              .then(value => (value == -1 ) ? '0' : value)
+            peopleCountCapacity.innerHTML =
+              await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get()
+              .then(value => (value == -1 ) ? 'Not Set' : value)
 
             const getPeopleCountCurrent = await xapi.Status.RoomAnalytics.PeopleCount.Current.get()
               .then(value => (value == -1 ) ? '0' : value)

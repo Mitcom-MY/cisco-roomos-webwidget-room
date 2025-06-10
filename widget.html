@@ -88,7 +88,7 @@
                   </span>
                 </header>
                 <div class="card-content has-text-centered">
-                  <p class="title" id="peopleCountCurrent">...</p> / <p class="title" id="peopleCountCapacity">...</p>
+                  <h1 class="title" id="peopleCountCurrent_Capacity">...</h1>
                 </div>
               </div>
             </div>
@@ -276,6 +276,14 @@
               await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get()
               .then(value => (value == -1 ) ? 'Not Set' : value)
 
+            const getPeopleCountCurrent = await xapi.Status.RoomAnalytics.PeopleCount.Current.get()
+              .then(value => (value == -1 ) ? '0' : value)
+
+            const getPeopleCountCapacity = await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get()
+              .then(value => (value == -1 ) ? 'Not Set' : value)
+
+            peopleCountCurrent_Capacity.innerHTML = getPeopleCountCurrent + ' / ' + getPeopleCountCapacity;
+            
             try {
               ambientNoise.innerHTML =
                 await xapi.Status.RoomAnalytics.AmbientNoise.Level.A.get();

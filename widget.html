@@ -81,14 +81,14 @@
               <div class="card has-background-dark has-text-grey-light outline">
                 <header class="card-header has-text-left">
                   <p class="card-header-title is-size-5 has-text-grey-light">
-                    Ambient Noise | Sound Level
+                    Amb. Noise | Sound Lvl.
                   </p>
                   <span class="icon is-large is-size-5">
                     <i class="fas fa-ear-listen"></i>
                   </span>
                 </header>
                 <div class="card-content has-text-centered">
-                  <p class="title"><span class="title" id="ambientNoise">...</span> | <span class="title" id="soundLevel">...</span></p>
+                  <p><span class="title" id="ambientNoise">...</span> dBA <span class="title">|</span> <span class="title" id="soundLevel">...</span> dBA</p>
                 </div>
               </div>
             </div>
@@ -114,7 +114,7 @@
               <div class="card has-background-dark has-text-grey-light outline">
                 <header class="card-header has-text-left">
                   <p class="card-header-title is-size-5 has-text-grey-light">
-                    People Count / Capacity
+                    Ppl. Count / Cap.
                   </p>
                   <span class="icon is-large is-size-5">
                     <i class="fas fa-users-viewfinder"></i>
@@ -289,11 +289,11 @@
             
             try {
               const anValue = await xapi.Status.RoomAnalytics.AmbientNoise.Level.A.get();
-              ambientNoise.innerHTML = anValue + " dBA";
+              ambientNoise.innerHTML = anValue;
                 
               xapi.Status.RoomAnalytics.AmbientNoise.Level.A.on(
                 (value) => {
-                  ambientNoise.innerHTML = value + " dBA";
+                  ambientNoise.innerHTML = value;
                 }
               );
             } catch {
@@ -302,11 +302,11 @@
 
             try {
               const slValue = await xapi.Status.RoomAnalytics.Sound.Level.A.get();
-              soundLevel.innerHTML = slValue + " dBA";
+              soundLevel.innerHTML = slValue;
               
               xapi.Status.RoomAnalytics.Sound.Level.A.on(
                 (value) => {
-                  soundLevel.innerHTML = value + " dBA";
+                  soundLevel.innerHTML = value;
                 }
               );
             } catch {

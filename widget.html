@@ -66,6 +66,39 @@
               <div class="card has-background-dark has-text-grey-light outline">
                 <header class="card-header has-text-left">
                   <p class="card-header-title is-size-5 has-text-grey-light">
+                    Air Quality (TVOC)
+                  </p>
+                  <span class="icon is-large is-size-5">
+                    <i class="fas fa-wind"></i>
+                  </span>
+                </header>
+                <div class="card-content has-text-centered">
+                  <h1 class="title" id="airQuality">...</h1>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="card has-background-dark has-text-grey-light outline">
+                <header class="card-header has-text-left">
+                  <p class="card-header-title is-size-5 has-text-grey-light">
+                    Ambient Noise | Sound Level
+                  </p>
+                  <span class="icon is-large is-size-5">
+                    <i class="fas fa-ear-listen"></i>
+                  </span>
+                </header>
+                <div class="card-content has-text-centered">
+                  <p class="title"><span class="title" id="ambientNoise">...</span> | <span class="title" id="soundLevel">...</span></p>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          <div class="columns is-mobile">
+            <div class="column">
+              <div class="card has-background-dark has-text-grey-light outline">
+                <header class="card-header has-text-left">
+                  <p class="card-header-title is-size-5 has-text-grey-light">
                     People Presence
                   </p>
                   <span class="icon is-large is-size-5">
@@ -88,39 +121,7 @@
                   </span>
                 </header>
                 <div class="card-content has-text-centered">
-                  <p><span class="title" id="peopleCountCurrent">...</span> / <span class="title" id="peopleCountCapacity">...</span></p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="columns is-mobile">
-            <div class="column">
-              <div class="card has-background-dark has-text-grey-light outline">
-                <header class="card-header has-text-left">
-                  <p class="card-header-title is-size-5 has-text-grey-light">
-                    Space Capacity
-                  </p>
-                  <span class="icon is-large is-size-5">
-                    <i class="fas fa-users-viewfinder"></i>
-                  </span>
-                </header>
-                <div class="card-content has-text-centered">
-                  <h1 class="title" id="peopleCountCapacity">...</h1>
-                </div>
-              </div>
-            </div>
-            <div class="column">
-              <div class="card has-background-dark has-text-grey-light outline">
-                <header class="card-header has-text-left">
-                  <p class="card-header-title is-size-5 has-text-grey-light">
-                    Ambient Noise
-                  </p>
-                  <span class="icon is-large is-size-5">
-                    <i class="fas fa-ear-listen"></i>
-                  </span>
-                </header>
-                <div class="card-content has-text-centered">
-                  <h1 class="title" id="ambientNoise">...</h1>
+                  <p class="title"><span class="title" id="peopleCountCurrent">...</span> / <span class="title" id="peopleCountCapacity">...</span></p>
                 </div>
               </div>
             </div>
@@ -140,16 +141,13 @@
     <script>
       const temperature = document.getElementById("temperature");
       const humidity = document.getElementById("humidity");
+      const airQuality = document.getElementById("airQuality");
       const peoplePresence = document.getElementById("peoplePresence");
-      const peopleCountCurrentCapacity = document.getElementById("peopleCountCurrentCapacity");
       const peopleCountCurrent = document.getElementById("peopleCountCurrent");
-      const peopleCountCapacity = document.getElementById(
-        "peopleCountCapacity"
-      );
+      const peopleCountCapacity = document.getElementById("peopleCountCapacity");
       const ambientNoise = document.getElementById("ambientNoise");
-      
-      
-
+      const soundLevel = document.getElementById("soundLevel");
+    
       const status = document.getElementById("status");
 
       const queryString = window.location.search;
@@ -228,12 +226,19 @@
               const hValue = await xapi.Status.Peripherals.ConnectedDevice[navID].RoomAnalytics.RelativeHumidity.get();
               humidity.innerHTML = hValue + "%";
 
+              const aValue = await xapi.Status.Peripherals.ConnectedDevice[navID].RoomAnalytics.AirQuality.Index.get();
+              airQuality.innerHTML = aValue;
+
               xapi.Status.RoomAnalytics.AmbientTemperature.on((value) => {
                 temperature.innerHTML = convertTemp(value);
               });
 
               xapi.Status.Peripherals.ConnectedDevice[navID].RoomAnalytics.RelativeHumidity.on((value) => {
                 humidity.innerHTML = value + "%";
+              });
+              
+              xapi.Status.Peripherals.ConnectedDevice[navID].AirQuality.Index.on((value) => {
+                temperature.innerHTML = convertTemp(value);
               });
             } else {
               console.log(
@@ -279,19 +284,11 @@
             peopleCountCapacity.innerHTML =
               await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get()
               .then(value => (value == -1 ) ? 'Not Set' : value)
-
-            const getPeopleCountCurrent = await xapi.Status.RoomAnalytics.PeopleCount.Current.get()
-              .then(value => (value == -1 ) ? '0' : value)
-
-            const getPeopleCountCapacity = await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get()
-              .then(value => (value == -1 ) ? 'Not Set' : value)
-
-            peopleCountCurrentCapacity.innerHTML = getPeopleCountCurrent + ` / ` + getPeopleCountCapacity;
             
             try {
               ambientNoise.innerHTML =
                 await xapi.Status.RoomAnalytics.AmbientNoise.Level.A.get();
-
+                
                 xapi.Status.RoomAnalytics.AmbientNoise.Level.A.on(
                   (value) => {
                     ambientNoise.innerHTML = value;
@@ -299,6 +296,19 @@
               );
             } catch {
               ambientNoise.innerHTML = "N/A";
+            }
+
+            try {
+              soundLevel.innerHTML =
+                await xapi.Status.RoomAnalytics.Sound.Level.A.get();
+                
+                xapi.Status.RoomAnalytics.Sound.Level.A.on(
+                  (value) => {
+                    soundLevel.innerHTML = value;
+                  }
+              );
+            } catch {
+              soundLevel.innerHTML = "N/A";
             }
 
             xapi.Status.RoomAnalytics.PeoplePresence.on((value) => {

@@ -88,7 +88,7 @@
                   </span>
                 </header>
                 <div class="card-content has-text-centered">
-                  <h1 class="title" id="peopleCountCurrent_Capacity">...</h1>
+                  <h1 class="title" id="peopleCountCurrentCapacity">...</h1>
                 </div>
               </div>
             </div>
@@ -141,12 +141,13 @@
       const temperature = document.getElementById("temperature");
       const humidity = document.getElementById("humidity");
       const peoplePresence = document.getElementById("peoplePresence");
-      const peopleCountCurrent = document.getElementById("peopleCountCurrent");
-      const peopleCountCapacity = document.getElementById(
-        "peopleCountCapacity"
-      );
+      const peopleCountCurrentCapacity = document.getElementById("peopleCountCurrentCapacity");
+      // const peopleCountCurrent = document.getElementById("peopleCountCurrent");
+      // const peopleCountCapacity = document.getElementById(
+      //   "peopleCountCapacity"
+      // );
       const ambientNoise = document.getElementById("ambientNoise");
-      const peopleCountCurrent_Capacity = document.getElementById("peopleCountCurrent_Capacity");
+      
       
 
       const status = document.getElementById("status");
@@ -217,11 +218,11 @@
             console.log("NavID", navID);
 
             if (navID != -1) {
-              console.log(
-                `Getting Temperature and Humidity values from In-Room Navigator [${navID}]`
+              console.log(`
+                Getting Temperature and Humidity values from In-Room Navigator [${navID}]`
               );
 
-              const tValue = await xapi.Status.Peripherals.ConnectedDevice[navID].RoomAnalytics.AmbientTemperature.get()
+              const tValue = await xapi.Status.Peripherals.ConnectedDevice[navID].RoomAnalytics.AmbientTemperature.get();
               temperature.innerHTML = convertTemp(tValue)
 
               const hValue = await xapi.Status.Peripherals.ConnectedDevice[navID].RoomAnalytics.RelativeHumidity.get();
@@ -239,9 +240,9 @@
                 `No In-Room Navigators found, attempting to get data from main device`
               );
               try {
-                const temp =
-                  await xapi.Status.RoomAnalytics.AmbientTemperature.get();
+                const temp = await xapi.Status.RoomAnalytics.AmbientTemperature.get();
                 temperature.innerHTML = convertTemp(temp);
+                
                 xapi.Status.RoomAnalytics.AmbientTemperature.on((value) => {
                   temperature.innerHTML = convertTemp(value);
                 });
@@ -253,6 +254,7 @@
               try {
                 const value = await xapi.Status.RoomAnalytics.RelativeHumidity.get();
                 humidity.innerHTML = value+"%";
+                
                 xapi.Status.RoomAnalytics.RelativeHumidity.on((value) => {
                   humidity.innerHTML = value+"%";
                 });
@@ -270,13 +272,13 @@
             }
 
             peoplePresence.innerHTML =
-              await await xapi.Status.RoomAnalytics.PeoplePresence.get();
-            peopleCountCurrent.innerHTML =
-              await await xapi.Status.RoomAnalytics.PeopleCount.Current.get()
-              .then(value => (value == -1 ) ? '0' : value)
-            peopleCountCapacity.innerHTML =
-              await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get()
-              .then(value => (value == -1 ) ? 'Not Set' : value)
+               await await xapi.Status.RoomAnalytics.PeoplePresence.get();
+            // peopleCountCurrent.innerHTML =
+            //   await await xapi.Status.RoomAnalytics.PeopleCount.Current.get()
+            //   .then(value => (value == -1 ) ? '0' : value)
+            // peopleCountCapacity.innerHTML =
+            //   await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get()
+            //   .then(value => (value == -1 ) ? 'Not Set' : value)
 
             const getPeopleCountCurrent = await xapi.Status.RoomAnalytics.PeopleCount.Current.get()
               .then(value => (value == -1 ) ? '0' : value)
@@ -284,7 +286,7 @@
             const getPeopleCountCapacity = await xapi.Status.RoomAnalytics.PeopleCount.Capacity.get()
               .then(value => (value == -1 ) ? 'Not Set' : value)
 
-            peopleCountCurrent_Capacity.innerHTML = getPeopleCountCurrent + ' / ' + getPeopleCountCapacity;
+            peopleCountCurrentCapacity.innerHTML = getPeopleCountCurrent + ` / ` + getPeopleCountCapacity;
             
             try {
               ambientNoise.innerHTML =
